@@ -25,7 +25,8 @@ export default function Home() {
       const data = await res.json();
       setPostData(data.posts);
     } catch (error) {
-      console.log("Error loading posts: ", error);
+      console.log("Error loading posts: ", error , "NEXT_PUBLIC_API_URL :" , process.env.NEXT_PUBLIC_API_URL);
+      alert("Failed to load First Page");
     }
   };
 
