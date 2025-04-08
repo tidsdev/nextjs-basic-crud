@@ -5,7 +5,7 @@ function DeleteBtn({ id }) {
   const handleDelete = async () => {
     const comfirmed = confirm("Are you sure you want to delete this post?");
     if (comfirmed) {
-      const res = await fetch(`http://localhost:3000/api/posts?id=${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts?id=${id}`, {
         method: "DELETE",
       });
 

@@ -11,7 +11,7 @@ export default function Home() {
 
   const getPosts = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`, {
         method: "GET",
         headers: {
           "content-type": "application/json",
@@ -25,7 +25,7 @@ export default function Home() {
       const data = await res.json();
       setPostData(data.posts);
     } catch (error) {
-      console.log("Error loading posts: ", error , "NEXT_PUBLIC_API_URL :" , process.env.NEXT_PUBLIC_API_URL);
+      console.log("Error loading posts: ", error , "NEXT_PUBLIC_API_URL :" , process.env.NEXT_PUBLIC_API_BASE_URL);
       alert("Failed to load First Page");
     }
   };
