@@ -55,7 +55,7 @@ function EditPostPage({ params }) {
         throw new Error("Failed to update post");
       }
       router.refresh();
-      router.push("/");
+      router.push("/shop");
     }
     catch (error) {
       console.log(error);

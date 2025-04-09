@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import DeleteBtn from "../app/DeleteBtn";
+import DeleteBtn from "../components/DeleteBtn";
 
-export default function Home() {
+export default function HomePage() {
   const [postData, setPostData] = useState([]);
   console.log(postData);
 
@@ -51,7 +51,7 @@ export default function Home() {
               <div>
                 <Link
                   className="bg-gray-500 text-white border px-3 py-2 rounded-md text-lg my-2"
-                  href={`/edit/${val._id}`}
+                  href={`/shop/edit/${val._id}`}
                 >
                   Edit
                 </Link>
