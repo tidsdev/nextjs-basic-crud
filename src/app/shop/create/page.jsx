@@ -26,7 +26,7 @@ function CreatePostPage() {
       });
       console.log(res.body);
       if (res.ok) {
-        router.push("/");
+        router.push("/shop");
       } else {
         throw new Error("Failed to create post");
       }
