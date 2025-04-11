@@ -1,6 +1,7 @@
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import "./globals.css";
+import ConditionalBanner from "./components/ConditionalBanner";
 
 export const metadata = {
   title: "Next.js CRUD App",
@@ -12,18 +13,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // const pathName = usePathname();
+
   return (
     <html lang="en">
       <body>
         <NavBar></NavBar>
-        <div className="bg-gray-100 h-[70vh] flex flex-col items-center justify-center">
-          <h1 className="text-6xl font-bold mb-4">
-            Lorem ipsum dolor sit amet.
-          </h1>
-          <p className="text-1xl w-100">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, hic.
-          </p>
-        </div>
+       <ConditionalBanner/>
         <div className="container mx-auto p-4">{children}</div>
         <Footer></Footer>
       </body>

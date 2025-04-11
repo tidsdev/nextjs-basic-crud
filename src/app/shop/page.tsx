@@ -45,9 +45,9 @@ export default function HomePage() {
   return (
     <main className="container mx-auto">
       <h1 className="text-3xl font-bold mb-4">Lorem ipsum dolor sit amet.</h1>
-      <button className="bg-green-500 p-3 text-white rounded">
+      {/* <button className="bg-green-500 p-3 text-white rounded">
         <Link href="/shop/create">Create Post</Link>
-      </button>
+      </button> */}
       <div className="grid grid-cols-4 mt-3 gap-5">
         {postData && postData.length > 0 ? (
           postData.map((val) => (
