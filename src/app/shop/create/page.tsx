@@ -139,10 +139,9 @@ function CreatePostPage() {
           pageSizeOptions={[5, 10]}
           checkboxSelection={false}
           sx={{ border: 0 }}
+          className=""
         />
       </div>
-
-      {/* <BasicModal /> */}
     </>
   );
 }
