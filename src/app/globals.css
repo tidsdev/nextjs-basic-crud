@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* ซ่อน scrollbar บน Chrome, Safari และ Edge */
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* ซ่อน scrollbar บน Internet Explorer */
+  scrollbar-width: none; /* ซ่อน scrollbar บน Firefox */
+}

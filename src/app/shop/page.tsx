@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import DeleteBtn from "../components/DeleteBtn";
+import DeleteBtn from "../components/inputs/deleteBtn";
 
 export default function HomePage() {
   const [postData, setPostData] = useState([]);
