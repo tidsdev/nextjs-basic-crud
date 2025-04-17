@@ -3,6 +3,7 @@ import NavBar from "./components/uis/navBar";
 import "./globals.css";
 import ConditionalBanner from "./components/uis/conditionalBanner";
 import { Card } from "@mui/material";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata = {
   title: "Next.js CRUD App",
@@ -25,6 +26,7 @@ export default function RootLayout({
           <div className="flex-grow container mx-auto p-4">{children}</div>
         </Card>
         <Footer></Footer>
+        <SpeedInsights />
       </body>
     </html>
   );
