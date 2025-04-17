@@ -4,9 +4,10 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import PersonIcon from "@mui/icons-material/Person";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 const NavBar = () => {
   return (
-    <nav className="flex items-center font-bold p-4 sticky top-0 bg-white shadow-md">
+    <nav className="flex items-center font-bold p-4 sticky top-0 bg-white shadow-md z-10">
       <div className="flex gap-8">
         <Link
           href="/"
@@ -21,6 +22,13 @@ const NavBar = () => {
         >
           <ShoppingBasketIcon fontSize="medium" className="mr-2" />
           SHOP
+        </Link>
+        <Link
+          href="/myOrder"
+          className="hover:text-gray-500 transition-colors duration-100 flex items-center"
+        >
+          <ShoppingCartIcon fontSize="medium" className="mr-2" />
+          My Order
         </Link>
         <Link
           href="/shop/create"

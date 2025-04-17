@@ -3,31 +3,61 @@
 import { set } from "mongoose";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import BasicModal from "../../components/uis/modal";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, Icon, IconButton, TextField } from "@mui/material";
+import Image from "next/image";
+import { Delete, Article, Visibility } from "@mui/icons-material";
 
 const columns: GridColDef[] = [
-  { field: "id", headerName: "No.", width: 70 },
-  { field: "image", headerName: "Product Image", width: 130 },
-  { field: "code", headerName: "Product Code", width: 130 },
-  { field: "name", headerName: "Product Name", width: 130 },
-  { field: "quantity", headerName: "Product Quantity", width: 130 },
-  { field: "description", headerName: "Product Description", width: 150 },
-];
+  { field: "_id", headerName: "No.", width: 70 },
+  {
+    field: "img",
+    headerName: "Product Image",
+    width: 150,
+    align: "center",
+    headerAlign: "center",
 
-const rows = [
-  { id: 1, name: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, name: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, name: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, name: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, name: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, name: "Melisandre", firstName: null, age: 150 },
-  { id: 7, name: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, name: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, name: "Roxie", firstName: "Harvey", age: 65 },
+    renderCell: (params) => {
+      const { img } = params.row;
+      return (
+        <div className="flex justify-center items-center w-full h-full">
+          <Image
+            src={img}
+            alt="Product"
+            width={80} // กำหนดขนาดความกว้าง
+            height={80} // กำหนดขนาดความสูง
+            className="object-cover rounded-md"
+          />
+        </div>
+      );
+    },
+  },
+  { field: "code", headerName: "Product Code", width: 150 },
+  { field: "title", headerName: "Product Name", flex: 1 },
+  { field: "content", headerName: "Product Description", flex: 1 },
+  { field: "quantity", headerName: "Product Quantity", width: 150 },
+  {
+    field: "Action",
+    headerName: "Action",
+    width: 100,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => {
+      return (
+        <div className="flex justify-center items-center w-full h-full">
+          <IconButton color="primary" href={`/shop/edit/${params.row._id}`}>
+            <Article></Article>
+          </IconButton>
+          <IconButton color="primary">
+            <Delete></Delete>
+          </IconButton>
+        </div>
+      );
+    },
+  },
 ];
 
 const paginationModel = { page: 0, pageSize: 5 };
@@ -36,6 +66,7 @@ function CreatePostPage() {
   const [title, setTitle] = useState("");
   const [img, setImg] = useState("");
   const [content, setContent] = useState("");
+  const [postData, setPostData] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,6 +95,39 @@ function CreatePostPage() {
       console.log(error);
     }
   };
+
+  const getPosts = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch posts");
+      }
+
+      const data = await res.json();
+      setPostData(data.posts);
+    } catch (error) {
+      console.log(
+        "Error loading posts: ",
+        error,
+        "NEXT_PUBLIC_API_URL :",
+        process.env.NEXT_PUBLIC_API_BASE_URL
+      );
+      alert("Failed to load First Page");
+    }
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
 
   const router = useRouter();
   return (
@@ -133,13 +197,15 @@ function CreatePostPage() {
       </BasicModal>
       <div className="mt-4">
         <DataGrid
-          rows={rows}
+          rows={postData}
           columns={columns}
+          getRowId={(row) => row._id}
           initialState={{ pagination: { paginationModel } }}
           pageSizeOptions={[5, 10]}
           checkboxSelection={false}
           sx={{ border: 0 }}
           className=""
+          rowHeight={100}
         />
       </div>
     </>
