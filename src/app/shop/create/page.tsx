@@ -51,7 +51,7 @@ const columns: GridColDef[] = [
           <IconButton color="primary" href={`/shop/edit/${params.row._id}`}>
             <Article></Article>
           </IconButton>
-          <IconButton color="primary">
+          <IconButton color="error">
             <Delete></Delete>
           </IconButton>
         </div>
@@ -135,7 +135,12 @@ function CreatePostPage() {
       <BasicModal text="Add Product">
         <form onSubmit={handleSubmit}>
           <Grid container={true} spacing={2}>
-            <Grid size={12}>
+            
+            <Grid size={6}>
+            <Image src={img} width={300} height={0} alt="1" />
+            </Grid>
+
+            <Grid size={6}>
               <TextField
                 id="outlined-basic"
                 size="small"
