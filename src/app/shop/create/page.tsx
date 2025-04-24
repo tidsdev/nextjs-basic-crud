@@ -10,6 +10,8 @@ import BasicModal from "../../components/uis/modal";
 import { Button, Grid, Icon, IconButton, TextField } from "@mui/material";
 import Image from "next/image";
 import { Delete, Article, Visibility } from "@mui/icons-material";
+import DeleteProduct from "../../components/Delete";
+import VisuallyHiddenInput from "../../components/uis/upload";
 
 const columns: GridColDef[] = [
   { field: "_id", headerName: "No.", width: 70 },
@@ -51,7 +53,10 @@ const columns: GridColDef[] = [
           <IconButton color="primary" href={`/shop/edit/${params.row._id}`}>
             <Article></Article>
           </IconButton>
-          <IconButton color="error">
+          <IconButton
+            color="error"
+            onClick={() => DeleteProduct(params.row._id)}
+          >
             <Delete></Delete>
           </IconButton>
         </div>
@@ -67,10 +72,12 @@ function CreatePostPage() {
   const [img, setImg] = useState("");
   const [content, setContent] = useState("");
   const [postData, setPostData] = useState([]);
+  const [code, setCode] = useState("");
+  const [quantity, setQuantity] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !img || !content) {
+    if (!title || !img || !content || !code || !quantity) {
       alert("Please fill all the fields");
       return;
     }
@@ -82,11 +89,11 @@ function CreatePostPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ title, img, content }),
+          body: JSON.stringify({ title, img, content, code, quantity }),
         }
       );
       console.log(res.body);
-      if (res.ok) {
+      if (res.ok) { 
         router.push("/shop");
       } else {
         throw new Error("Failed to create post");
@@ -135,9 +142,9 @@ function CreatePostPage() {
       <BasicModal text="Add Product">
         <form onSubmit={handleSubmit}>
           <Grid container={true} spacing={2}>
-            
             <Grid size={6}>
-            <Image src={img} width={300} height={0} alt="1" />
+              <Image src={img} width={300} height={0} alt="1"/>
+              {/* <VisuallyHiddenInput></VisuallyHiddenInput> */}
             </Grid>
 
             <Grid size={6}>
@@ -155,6 +162,37 @@ function CreatePostPage() {
                 fullWidth={true}
               />
             </Grid>
+            <Grid size={6}>
+              <TextField
+                id="outlined-basic"
+                size="small"
+                label="Product Code"
+                variant="outlined"
+                onChange={(e) => setCode(e.target.value)}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+                fullWidth={true}
+              />
+            </Grid>
+            <Grid size={6}>
+              <TextField
+                type="number"
+                id="outlined-basic"
+                size="small"
+                label="Product Quantity"
+                variant="outlined"
+                onChange={(e) => setQuantity(Number(e.target.value))}
+                slotProps={{
+                  inputLabel: {
+                    shrink: true,
+                  },
+                }}
+                fullWidth={true}
+              ></TextField>
+            </Grid>
             <Grid size={12}>
               <TextField
                 id="outlined-basic"
@@ -170,6 +208,7 @@ function CreatePostPage() {
                 fullWidth={true}
               />
             </Grid>
+
             <Grid size={12}>
               <TextField
                 id="outlined-basic"
@@ -211,6 +250,8 @@ function CreatePostPage() {
           sx={{ border: 0 }}
           className=""
           rowHeight={100}
+          loading={postData.length === 0}
+          disableRowSelectionOnClick={true}
         />
       </div>
     </>

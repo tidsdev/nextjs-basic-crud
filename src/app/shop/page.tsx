@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DeleteBtn from "../components/inputs/deleteBtn";
+import { motion } from "motion/react"
 
 export default function HomePage() {
   const [postData, setPostData] = useState([]);
-  console.log(postData);
+  // console.log(postData);
 
   const getPosts = async () => {
     try {
@@ -60,7 +61,7 @@ export default function HomePage() {
                   className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-md text-sm w-20 text-center"
                   href={`/shop/edit/${val._id}`}
                 >
-                  Edit
+                  DETAIL
                 </Link>
                 <DeleteBtn id={val._id} />
               </div>
@@ -70,6 +71,7 @@ export default function HomePage() {
           <p className="bg-gray-200 p-3 my-3">you do not have any posts yet</p>
         )}
       </div>
+      <motion.ul animate={{ rotate: 360 }}/>
     </main>
   );
 }

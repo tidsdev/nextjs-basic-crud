@@ -16,12 +16,16 @@ export async function PUT(req, { params }) {
     newTitle: title,
     newImg: img,
     newContent: content,
+    newCode: code,
+    newQuantity: quantity,
   } = await req.json();
   await connectMongoDB();
   await Post.findByIdAndUpdate(id, {
     title,
     img,
     content,
+    code,
+    quantity,
   });
   return NextResponse.json(
     { message: "Post updated successfully" },

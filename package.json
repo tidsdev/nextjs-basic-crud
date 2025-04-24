@@ -17,11 +17,12 @@
     "@vercel/speed-insights": "^1.2.0",
     "animate.css": "^4.1.1",
     "mongoose": "^8.13.2",
+    "motion": "^12.8.0",
     "mui": "^0.0.1",
     "next": "15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "vercel": "^41.6.0"
+    "vercel": "^41.6.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
