@@ -143,8 +143,8 @@ function CreatePostPage() {
         <form onSubmit={handleSubmit}>
           <Grid container={true} spacing={2}>
             <Grid size={6}>
-              <Image src={img} width={300} height={0} alt="1"/>
-              {/* <VisuallyHiddenInput></VisuallyHiddenInput> */}
+              {/* <Image src={img} width={300} height={0} alt="1"/> */}
+              <VisuallyHiddenInput></VisuallyHiddenInput>
             </Grid>
 
             <Grid size={6}>
