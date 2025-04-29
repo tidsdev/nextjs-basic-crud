@@ -1,6 +1,6 @@
 import MyOrder from "../../../../models/myOrder";
 
-export async function AddOrder(req){
+export async function POST(req){
   const { id } = await req.params;
   console.log("++++++++++++");
   console.log(id);
