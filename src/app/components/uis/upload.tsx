@@ -17,14 +17,19 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export default function InputFileUpload() {
+export default function InputFileUpload({onChange} : { onChange: (value: string) => void }) {
   const [preview, setPreview] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files?.[0];
-    if (files) {
-      const objectUrl = URL.createObjectURL(files);
-      setPreview(objectUrl);
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result as string;
+        setPreview(base64);
+        onChange(base64);
+      }
+      reader.readAsDataURL(file);
     }
   };
 

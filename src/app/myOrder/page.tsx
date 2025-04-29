@@ -1,29 +1,9 @@
 "use client";
 
-import { motion, useScroll } from "motion/react";
-import OnOff from "../components/onOff";
-
 const MyOrder = () => {
-  const { scrollYProgress } = useScroll();
   return (
     <div>
-      {/* <motion.div
-                id="scroll-indicator"
-                style={{
-                    scaleX: scrollYProgress,
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: 10,
-                    originX: 0,
-                    backgroundColor: "#ff0088",
-                }}
-            /> */}
-             <OnOff />
-      <h1>My Order</h1>
-      {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam eligendi minus blanditiis sequi adipisci dolor maxime rerum perferendis, tenetur odit quo tempore libero animi vero natus ex repudiandae eum earum..</p> */}
-      <Content />    
+      
     </div>
   );
 }

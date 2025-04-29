@@ -11,7 +11,7 @@ import { Button, Grid, Icon, IconButton, TextField } from "@mui/material";
 import Image from "next/image";
 import { Delete, Article, Visibility } from "@mui/icons-material";
 import DeleteProduct from "../../components/Delete";
-import VisuallyHiddenInput from "../../components/uis/upload";
+import InputFileUpload from "../../components/uis/upload";
 
 const columns: GridColDef[] = [
   { field: "_id", headerName: "No.", width: 70 },
@@ -143,8 +143,7 @@ function CreatePostPage() {
         <form onSubmit={handleSubmit}>
           <Grid container={true} spacing={2}>
             <Grid size={6}>
-              {/* <Image src={img} width={300} height={0} alt="1"/> */}
-              <VisuallyHiddenInput></VisuallyHiddenInput>
+              <InputFileUpload onChange={(value) => setImg(value)}></InputFileUpload>
             </Grid>
 
             <Grid size={6}>
@@ -193,21 +192,7 @@ function CreatePostPage() {
                 fullWidth={true}
               ></TextField>
             </Grid>
-            <Grid size={12}>
-              <TextField
-                id="outlined-basic"
-                size="small"
-                label="Post Img Url"
-                variant="outlined"
-                onChange={(e) => setImg(e.target.value)}
-                slotProps={{
-                  inputLabel: {
-                    shrink: true,
-                  },
-                }}
-                fullWidth={true}
-              />
-            </Grid>
+           
 
             <Grid size={12}>
               <TextField

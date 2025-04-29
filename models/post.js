@@ -1,8 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { number } from "motion";
 
 const postSchema = new Schema(
-  {
+  { 
     title: String,
     img: String,
     content: String,

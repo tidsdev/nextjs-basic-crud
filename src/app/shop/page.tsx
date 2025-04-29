@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import DeleteBtn from "../components/inputs/deleteBtn";
 import { motion } from "motion/react"
+import { Button } from "@mui/material";
 
 export default function HomePage() {
   const [postData, setPostData] = useState([]);
@@ -39,6 +40,31 @@ export default function HomePage() {
     }
   };
 
+  const addOrder = async (id: string) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/myOrder`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ productId: id }),
+        }
+      );
+      console.log(res.body);
+
+      if (res.ok) {
+        alert("Order added successfully");
+      } else {
+        throw new Error("Failed to add order");
+      }
+    } catch (error) {
+      console.log(error);
+    alert("Failed to add order");
+    }
+  };
+
   useEffect(() => {
     getPosts();
   }, []);
@@ -57,13 +83,24 @@ export default function HomePage() {
               <Image src={val.img} width={300} height={0} alt={val.title} />
               <p className="mb-4">{val.content}</p>
               <div className="flex justify-start items-center gap-2">
-                <Link
+                {/* <Link
                   className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded-md text-sm w-20 text-center"
                   href={`/shop/edit/${val._id}`}
                 >
                   DETAIL
                 </Link>
-                <DeleteBtn id={val._id} />
+                <DeleteBtn id={val._id} /> */}
+                <Button
+                onClick={() => addOrder(val._id)}
+                  variant="contained"
+                  color="primary">
+                  Add
+                </Button>
+                <Button
+                  variant="contained"
+                  color="inherit">
+                  Detail
+                </Button>
               </div>
             </div>
           ))
