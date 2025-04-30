@@ -1,6 +1,6 @@
 import React from "react";
 import { connectMongoDB } from "../../../../../lib/mongodb";
-import Post from "../../../../../models/post";
+import Post from "../../../../../models/product";
 import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {

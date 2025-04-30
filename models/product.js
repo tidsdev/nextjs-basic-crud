@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const postSchema = new Schema(
+const productSchema = new Schema(
   { 
     title: String,
     img: String,
@@ -13,6 +13,6 @@ const postSchema = new Schema(
   }
 );
 
-const Post = mongoose.models.Post || mongoose.model("Post", postSchema);
+const Product = mongoose.models.Product || mongoose.model("Product", productSchema);
 
-export default Post;
+export default Product;

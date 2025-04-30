@@ -1,15 +1,12 @@
 "use client";
 
-import { set } from "mongoose";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import Paper from "@mui/material/Paper";
 import BasicModal from "../../components/uis/modal";
-import { Button, Grid, Icon, IconButton, TextField } from "@mui/material";
+import { Button, Grid, IconButton, TextField } from "@mui/material";
 import Image from "next/image";
-import { Delete, Article, Visibility } from "@mui/icons-material";
+import { Delete, Article, } from "@mui/icons-material";
 import DeleteProduct from "../../components/Delete";
 import InputFileUpload from "../../components/uis/upload";
 
@@ -83,7 +80,7 @@ function CreatePostPage() {
     }
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`,
         {
           method: "POST",
           headers: {
@@ -106,7 +103,7 @@ function CreatePostPage() {
   const getPosts = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`,
         {
           method: "GET",
           headers: {
@@ -224,6 +221,7 @@ function CreatePostPage() {
           </Grid>
         </form>
       </BasicModal>
+      
       <div className="mt-4">
         <DataGrid
           rows={postData}

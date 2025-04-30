@@ -1,193 +1,70 @@
 "use client";
 
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
+
+interface MyOrder {
+  _id: string;
+  img: string;
+  code: string;
+  productDetails: { title: string }[]; // productDetails เป็น array ของ object ที่มีฟิลด์ name
+  content: string;
+  quantity: number;
+  title:string;
+}
+
+const columns: GridColDef[] = [
+  { field: "_id", headerName: "No.", width: 70 },
+  {
+    field: "img",
+    headerName: "Product Image",
+    width: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+  { field: "code", headerName: "Product Code", width: 150 },
+  // { field: "productDetails", headerName: "Product Name", flex: 1 ,
+  //   valueGetter: (params : {row : MyOrder}) => {
+  //   return params.row.productDetails?.[0]?.title || "N/A";
+  // }},
+  { field: "content", headerName: "Product Description", flex: 1 },
+  { field: "quantity", headerName: "Product Quantity", width: 150 },
+];
+
 const MyOrder = () => {
+  const [myOrderData, setMyData] = useState<MyOrder[]>([]);
+  const getMyOrder = async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/myOrders`,
+      {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const data = await res.json();
+    setMyData(data.myOrders);
+  };
+
+  useEffect(() => {
+    getMyOrder();
+  }, []);
+
   return (
     <div>
-      
+      <DataGrid
+        rows={myOrderData}
+        columns={columns}
+        getRowId={(row) => row._id}
+      ></DataGrid>
     </div>
   );
-}
-
-
-function Content() {
-  return (
-      <>
-          <article
-              style={{
-                  maxWidth: 500,
-                  padding: "150px 20px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 20,
-              }}
-          >
-              <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aliquam ac rhoncus quam.
-              </p>
-              <p>
-                  Fringilla quam urna. Cras turpis elit, euismod eget ligula
-                  quis, imperdiet sagittis justo. In viverra fermentum ex ac
-                  vestibulum. Aliquam eleifend nunc a luctus porta. Mauris
-                  laoreet augue ut felis blandit, at iaculis odio ultrices.
-                  Nulla facilisi. Vestibulum cursus ipsum tellus, eu tincidunt
-                  neque tincidunt a.
-              </p>
-              <h2>Sub-header</h2>
-              <p>
-                  In eget sodales arcu, consectetur efficitur metus. Duis
-                  efficitur tincidunt odio, sit amet laoreet massa fringilla
-                  eu.
-              </p>
-              <p>
-                  Pellentesque id lacus pulvinar elit pulvinar pretium ac non
-                  urna. Mauris id mauris vel arcu commodo venenatis. Aliquam
-                  eu risus arcu. Proin sit amet lacus mollis, semper massa ut,
-                  rutrum mi.
-              </p>
-              <p>
-                  Sed sem nisi, luctus consequat ligula in, congue sodales
-                  nisl.
-              </p>
-              <p>
-                  Vestibulum bibendum at erat sit amet pulvinar. Pellentesque
-                  pharetra leo vitae tristique rutrum. Donec ut volutpat ante,
-                  ut suscipit leo.
-              </p>
-              <h2>Sub-header</h2>
-              <p>
-                  Maecenas quis elementum nulla, in lacinia nisl. Ut rutrum
-                  fringilla aliquet. Pellentesque auctor vehicula malesuada.
-                  Aliquam id feugiat sem, sit amet tempor nulla. Quisque
-                  fermentum felis faucibus, vehicula metus ac, interdum nibh.
-                  Curabitur vitae convallis ligula. Integer ac enim vel felis
-                  pharetra laoreet. Interdum et malesuada fames ac ante ipsum
-                  primis in faucibus. Pellentesque hendrerit ac augue quis
-                  pretium.
-              </p>
-              <p>
-                  Morbi ut scelerisque nibh. Integer auctor, massa non dictum
-                  tristique, elit metus efficitur elit, ac pretium sapien nisl
-                  nec ante. In et ex ultricies, mollis mi in, euismod dolor.
-              </p>
-              <p>Quisque convallis ligula non magna efficitur tincidunt.</p>
-              <p>
-                  Pellentesque id lacus pulvinar elit pulvinar pretium ac non
-                  urna. Mauris id mauris vel arcu commodo venenatis. Aliquam
-                  eu risus arcu. Proin sit amet lacus mollis, semper massa ut,
-                  rutrum mi.
-              </p>
-              <p>
-                  Sed sem nisi, luctus consequat ligula in, congue sodales
-                  nisl.
-              </p>
-              <p>
-                  Vestibulum bibendum at erat sit amet pulvinar. Pellentesque
-                  pharetra leo vitae tristique rutrum. Donec ut volutpat ante,
-                  ut suscipit leo.
-              </p>
-              <h2>Sub-header</h2>
-              <p>
-                  Maecenas quis elementum nulla, in lacinia nisl. Ut rutrum
-                  fringilla aliquet. Pellentesque auctor vehicula malesuada.
-                  Aliquam id feugiat sem, sit amet tempor nulla. Quisque
-                  fermentum felis faucibus, vehicula metus ac, interdum nibh.
-                  Curabitur vitae convallis ligula. Integer ac enim vel felis
-                  pharetra laoreet. Interdum et malesuada fames ac ante ipsum
-                  primis in faucibus. Pellentesque hendrerit ac augue quis
-                  pretium.
-              </p>
-              <p>
-                  Morbi ut scelerisque nibh. Integer auctor, massa non dictum
-                  tristique, elit metus efficitur elit, ac pretium sapien nisl
-                  nec ante. In et ex ultricies, mollis mi in, euismod dolor.
-              </p>
-              <p>Quisque convallis ligula non magna efficitur tincidunt.</p>
-              <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aliquam ac rhoncus quam.
-              </p>
-              <p>
-                  Fringilla quam urna. Cras turpis elit, euismod eget ligula
-                  quis, imperdiet sagittis justo. In viverra fermentum ex ac
-                  vestibulum. Aliquam eleifend nunc a luctus porta. Mauris
-                  laoreet augue ut felis blandit, at iaculis odio ultrices.
-                  Nulla facilisi. Vestibulum cursus ipsum tellus, eu tincidunt
-                  neque tincidunt a.
-              </p>
-              <h2>Sub-header</h2>
-              <p>
-                  In eget sodales arcu, consectetur efficitur metus. Duis
-                  efficitur tincidunt odio, sit amet laoreet massa fringilla
-                  eu.
-              </p>
-              <p>
-                  Pellentesque id lacus pulvinar elit pulvinar pretium ac non
-                  urna. Mauris id mauris vel arcu commodo venenatis. Aliquam
-                  eu risus arcu. Proin sit amet lacus mollis, semper massa ut,
-                  rutrum mi.
-              </p>
-              <p>
-                  Sed sem nisi, luctus consequat ligula in, congue sodales
-                  nisl.
-              </p>
-              <p>
-                  Vestibulum bibendum at erat sit amet pulvinar. Pellentesque
-                  pharetra leo vitae tristique rutrum. Donec ut volutpat ante,
-                  ut suscipit leo.
-              </p>
-              <h2>Sub-header</h2>
-              <p>
-                  Maecenas quis elementum nulla, in lacinia nisl. Ut rutrum
-                  fringilla aliquet. Pellentesque auctor vehicula malesuada.
-                  Aliquam id feugiat sem, sit amet tempor nulla. Quisque
-                  fermentum felis faucibus, vehicula metus ac, interdum nibh.
-                  Curabitur vitae convallis ligula. Integer ac enim vel felis
-                  pharetra laoreet. Interdum et malesuada fames ac ante ipsum
-                  primis in faucibus. Pellentesque hendrerit ac augue quis
-                  pretium.
-              </p>
-              <p>
-                  Morbi ut scelerisque nibh. Integer auctor, massa non dictum
-                  tristique, elit metus efficitur elit, ac pretium sapien nisl
-                  nec ante. In et ex ultricies, mollis mi in, euismod dolor.
-              </p>
-              <p>Quisque convallis ligula non magna efficitur tincidunt.</p>
-              <p>
-                  Pellentesque id lacus pulvinar elit pulvinar pretium ac non
-                  urna. Mauris id mauris vel arcu commodo venenatis. Aliquam
-                  eu risus arcu. Proin sit amet lacus mollis, semper massa ut,
-                  rutrum mi.
-              </p>
-              <p>
-                  Sed sem nisi, luctus consequat ligula in, congue sodales
-                  nisl.
-              </p>
-              <p>
-                  Vestibulum bibendum at erat sit amet pulvinar. Pellentesque
-                  pharetra leo vitae tristique rutrum. Donec ut volutpat ante,
-                  ut suscipit leo.
-              </p>
-              <h2>Sub-header</h2>
-              <p>
-                  Maecenas quis elementum nulla, in lacinia nisl. Ut rutrum
-                  fringilla aliquet. Pellentesque auctor vehicula malesuada.
-                  Aliquam id feugiat sem, sit amet tempor nulla. Quisque
-                  fermentum felis faucibus, vehicula metus ac, interdum nibh.
-                  Curabitur vitae convallis ligula. Integer ac enim vel felis
-                  pharetra laoreet. Interdum et malesuada fames ac ante ipsum
-                  primis in faucibus. Pellentesque hendrerit ac augue quis
-                  pretium.
-              </p>
-              <p>
-                  Morbi ut scelerisque nibh. Integer auctor, massa non dictum
-                  tristique, elit metus efficitur elit, ac pretium sapien nisl
-                  nec ante. In et ex ultricies, mollis mi in, euismod dolor.
-              </p>
-              <p>Quisque convallis ligula non magna efficitur tincidunt.</p>
-          </article>
-      </>
-  )
-}
+};
 
 export default MyOrder;

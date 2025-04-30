@@ -1,20 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import DeleteBtn from "../components/inputs/deleteBtn";
 import { motion } from "motion/react"
 import { Button } from "@mui/material";
+import { ObjectId } from "mongoose";
 
 export default function HomePage() {
   const [postData, setPostData] = useState([]);
-  // console.log(postData);
+  console.log(postData);
 
   const getPosts = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`,
         {
           method: "GET",
           headers: {
@@ -40,10 +39,10 @@ export default function HomePage() {
     }
   };
 
-  const addOrder = async (id: string) => {
+  const addOrder = async (id: ObjectId) => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/myOrder`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/myOrders`,
         {
           method: "POST",
           headers: {
@@ -69,6 +68,7 @@ export default function HomePage() {
     getPosts();
   }, []);
 
+  
   return (
     <main className="container mx-auto">
       <h1 className="text-3xl font-bold mb-4">Lorem ipsum dolor sit amet.</h1>
@@ -80,7 +80,7 @@ export default function HomePage() {
           postData.map((val) => (
             <div key={val._id} className="shadow-md p-4 rounded-lg">
               <h4 className="text-xl font-bold mb-2">{val.title}</h4>
-              <Image src={val.img} width={300} height={0} alt={val.title} />
+              <Image src={val.img || "/"} width={300} height={0} alt={val.title} />
               <p className="mb-4">{val.content}</p>
               <div className="flex justify-start items-center gap-2">
                 {/* <Link

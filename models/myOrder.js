@@ -2,8 +2,7 @@ import mongoose ,{ Schema } from "mongoose";
 
 const myOrderSchema = new Schema(
   {
-    productId: { type: String},
-    // createdAt: { type: Date, default: Date.now },
+    productId:  Schema.Types.ObjectId,
   },
   {
     timestamps: true,
