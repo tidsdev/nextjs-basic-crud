@@ -12,7 +12,6 @@ import "aos/dist/aos.css";
 
 export default function HomePage() {
   const [postData, setPostData] = useState([]);
-  console.log(postData);
 
   const getPosts = async () => {
     try {
@@ -55,7 +54,6 @@ export default function HomePage() {
           body: JSON.stringify({ productId: id }),
         }
       );
-      console.log(res.body);
 
       if (res.ok) {
         alert("Crat added successfully");
@@ -75,36 +73,48 @@ export default function HomePage() {
 
   return (
     <main className="container mx-auto">
-      <h1 className="text-3xl font-bold mb-4">Lorem ipsum dolor sit amet.</h1>
-      <div className="grid grid-cols-4 mt-3 gap-5">
+      <h1
+        data-aos="fade-right"
+        className="text-4xl font-extrabold text-center mb-8 text-gray-800"
+      >
+        Product Showcase
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {postData && postData.length > 0 ? (
           postData.map((val) => (
-            <div
+            <motion.div
               data-aos="zoom-in-up"
               key={val._id}
-              className="shadow-md p-4 rounded-lg"
+              className="shadow-lg p-6 rounded-lg bg-white hover:shadow-xl transition-shadow duration-300"
+              whileHover={{ scale: 1.05 }}
             >
-              <h4 className="text-xl font-bold mb-2">{val.title}</h4>
               <Image
                 src={val.img_base64 || "/"}
                 width={300}
                 height={0}
                 alt={val.name}
+                className="w-full h-48 object-cover mb-4 rounded-md"
               />
-              <p className="mb-4">{val.description}</p>
-              <div className="flex justify-start items-center gap-2">
+              <p className="mb-2 text-1xl font-medium text-gray-800">
+                ชื่อสินค้า : {val.name}
+              </p>
+              <p className="mb-4 text-1xl font-medium text-gray-800">
+                รายละเอียดสินค้า : {val.description}
+              </p>
+              <div className="flex justify-between items-center gap-2">
                 <Button
                   onClick={() => addOrder(val._id)}
                   variant="contained"
                   color="primary"
+                  className="w-full"
                 >
-                  Add
+                  Add to crat
                 </Button>
-                <Button variant="contained" color="inherit">
+                <Button variant="outlined" color="secondary" className="w-full">
                   Detail
                 </Button>
               </div>
-            </div>
+            </motion.div>
           ))
         ) : (
           <Box

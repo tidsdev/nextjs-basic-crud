@@ -99,7 +99,6 @@ function CreatePostPage() {
       return;
     }
     try {
-      console.log("product ก่อนส่งไปที่ API : ", product);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`,
         {
@@ -117,7 +116,6 @@ function CreatePostPage() {
           }),
         }
       );
-      console.log(res.body);
       if (res.ok) {
         alert("Product created successfully");
         await getPosts();

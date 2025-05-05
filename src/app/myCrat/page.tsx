@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { IconButton } from "@mui/material";
+import { Delete, Article } from "@mui/icons-material";
 
 interface MyOrder {
   _id: string;
@@ -48,6 +50,18 @@ const columns: GridColDef[] = [
     },
   },
   { field: "quantity", headerName: "Product Quantity", width: 150 },
+  {
+    field: "action", headerName: "Action",width: 100, align: "center", headerAlign: "center",
+    renderCell: (params) => {
+      return(
+        <div className="flex justify-center items-center w-full h-full">
+          <IconButton color="error">
+            <Delete></Delete>
+          </IconButton>
+        </div>
+      )
+    }
+  }
 ];
 
 const MyOrder = () => {

@@ -12,23 +12,31 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
   const { id } = await params;
-  const {
-    newTitle: title,
-    newImg: img,
-    newContent: content,
-    newCode: code,
-    newQuantity: quantity,
-  } = await req.json();
+  const { name, img_base64, description } = await req.json();
+
   await connectMongoDB();
-  await Post.findByIdAndUpdate(id, {
-    title,
-    img,
-    content,
-    code,
-    quantity,
-  });
+
+  const updateProduct = await Post.findByIdAndUpdate(
+    id,
+    {
+      name,
+      img_base64,
+      description,
+    },
+    { new: true } // Return the updated document
+  );
+
+  if (!updateProduct) {
+    return NextResponse.json(
+      {
+        message: "Product not found",
+      },
+      { status: 404 }
+    );
+  }
+
   return NextResponse.json(
-    { message: "Post updated successfully" },
+    { message: "Product updated successfully", product: updateProduct },
     { status: 200 }
   );
 }
