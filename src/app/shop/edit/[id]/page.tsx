@@ -9,10 +9,11 @@ import InputFileUpload from "../../../components/uis/upload";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-function EditPostPage({ params }: { params: { id: string } }) {
-  console.log(params);
+function EditPostPage({ params }) {
+  const id = React.use(params);
+  console.log(id);
   const [productData, setProductData] = useState<Product>({
-    _id: params.id,
+    _id: "",
     name: "",
     code: "",
     img_base64: "",
@@ -54,8 +55,8 @@ function EditPostPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     AOS.init();
-    getPostById(productData._id);
-  }, [productData._id]);
+    getPostById(id);
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
