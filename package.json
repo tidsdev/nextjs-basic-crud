@@ -16,6 +16,8 @@
     "@mui/x-data-grid": "^7.28.3",
     "@vercel/speed-insights": "^1.2.0",
     "animate.css": "^4.1.1",
+    "aos": "^2.3.4",
+    "bson": "^6.10.3",
     "mongoose": "^8.13.2",
     "motion": "^12.8.0",
     "mui": "^0.0.1",

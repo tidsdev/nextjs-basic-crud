@@ -2,11 +2,12 @@ import mongoose, { Schema } from "mongoose";
 
 const productSchema = new Schema(
   { 
-    title: String,
-    img: String,
-    content: String,
     code: String,
-    quantity: Number,
+    name: String,
+    img_base64: String,
+    description: String,
+    price: Number,
+    stock_quantity: Number,
   },
   {
     timestamps: true,

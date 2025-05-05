@@ -24,11 +24,11 @@ const NavBar = () => {
           SHOP
         </Link>
         <Link
-          href="/myOrder"
+          href="/myCrat"
           className="hover:text-gray-500 transition-colors duration-100 flex items-center"
         >
           <ShoppingCartIcon fontSize="medium" className="mr-2" />
-          My Order
+          My CRAT
         </Link>
         <Link
           href="/shop/create"

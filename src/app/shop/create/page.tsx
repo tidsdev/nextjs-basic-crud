@@ -1,30 +1,32 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import BasicModal from "../../components/uis/modal";
 import { Button, Grid, IconButton, TextField } from "@mui/material";
 import Image from "next/image";
-import { Delete, Article, } from "@mui/icons-material";
+import { Delete, Article } from "@mui/icons-material";
 import DeleteProduct from "../../components/Delete";
 import InputFileUpload from "../../components/uis/upload";
+import { Product } from "../../../interfaces/product";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const columns: GridColDef[] = [
   { field: "_id", headerName: "No.", width: 70 },
   {
-    field: "img",
+    field: "img_base64",
     headerName: "Product Image",
     width: 150,
     align: "center",
     headerAlign: "center",
 
     renderCell: (params) => {
-      const { img } = params.row;
+      const { img_base64 } = params.row;
       return (
         <div className="flex justify-center items-center w-full h-full">
           <Image
-            src={img}
+            src={img_base64}
             alt="Product"
             width={80} // กำหนดขนาดความกว้าง
             height={80} // กำหนดขนาดความสูง
@@ -35,9 +37,9 @@ const columns: GridColDef[] = [
     },
   },
   { field: "code", headerName: "Product Code", width: 150 },
-  { field: "title", headerName: "Product Name", flex: 1 },
-  { field: "content", headerName: "Product Description", flex: 1 },
-  { field: "quantity", headerName: "Product Quantity", width: 150 },
+  { field: "name", headerName: "Product Name", flex: 1 },
+  { field: "description", headerName: "Product Description", flex: 1 },
+  { field: "stock_quantity", headerName: "Product Quantity", width: 150 },
   {
     field: "Action",
     headerName: "Action",
@@ -65,20 +67,39 @@ const columns: GridColDef[] = [
 const paginationModel = { page: 0, pageSize: 5 };
 
 function CreatePostPage() {
-  const [title, setTitle] = useState("");
-  const [img, setImg] = useState("");
-  const [content, setContent] = useState("");
+  const [product, setProduct] = useState<Product>({
+    _id: null,
+    name: "",
+    code: "",
+    img_base64: "",
+    description: "",
+    price: 0,
+    stock_quantity: 0,
+  });
+
   const [postData, setPostData] = useState([]);
-  const [code, setCode] = useState("");
-  const [quantity, setQuantity] = useState(0);
+
+  const handleChange = (field: keyof Product, value: string | number) => {
+    setProduct((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !img || !content || !code || !quantity) {
+    if (
+      !product.name ||
+      !product.img_base64 ||
+      !product.description ||
+      !product.code ||
+      !product.stock_quantity
+    ) {
       alert("Please fill all the fields");
       return;
     }
     try {
+      console.log("product ก่อนส่งไปที่ API : ", product);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`,
         {
@@ -86,12 +107,20 @@ function CreatePostPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ title, img, content, code, quantity }),
+          body: JSON.stringify({
+            name: product.name,
+            code: product.code,
+            img_base64: product.img_base64,
+            description: product.description,
+            price: product.price,
+            stock_quantity: product.stock_quantity,
+          }),
         }
       );
       console.log(res.body);
-      if (res.ok) { 
-        router.push("/shop");
+      if (res.ok) {
+        alert("Product created successfully");
+        await getPosts();
       } else {
         throw new Error("Failed to create post");
       }
@@ -130,17 +159,19 @@ function CreatePostPage() {
   };
 
   useEffect(() => {
+    AOS.init();
     getPosts();
   }, []);
 
-  const router = useRouter();
   return (
     <>
       <BasicModal text="Add Product">
         <form onSubmit={handleSubmit}>
           <Grid container={true} spacing={2}>
             <Grid size={6}>
-              <InputFileUpload onChange={(value) => setImg(value)}></InputFileUpload>
+              <InputFileUpload
+                onChange={(value) => handleChange("img_base64", value)}
+              ></InputFileUpload>
             </Grid>
 
             <Grid size={6}>
@@ -149,7 +180,7 @@ function CreatePostPage() {
                 size="small"
                 label="Product Name"
                 variant="outlined"
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => handleChange("name", e.target.value)} //setName(e.target.value)}
                 slotProps={{
                   inputLabel: {
                     shrink: true,
@@ -164,7 +195,7 @@ function CreatePostPage() {
                 size="small"
                 label="Product Code"
                 variant="outlined"
-                onChange={(e) => setCode(e.target.value)}
+                onChange={(e) => handleChange("code", e.target.value)} //setCode(e.target.value)}
                 slotProps={{
                   inputLabel: {
                     shrink: true,
@@ -180,7 +211,9 @@ function CreatePostPage() {
                 size="small"
                 label="Product Quantity"
                 variant="outlined"
-                onChange={(e) => setQuantity(Number(e.target.value))}
+                onChange={(e) =>
+                  handleChange("stock_quantity", Number(e.target.value))
+                } //setQuantity(Number(e.target.value))}
                 slotProps={{
                   inputLabel: {
                     shrink: true,
@@ -189,7 +222,6 @@ function CreatePostPage() {
                 fullWidth={true}
               ></TextField>
             </Grid>
-           
 
             <Grid size={12}>
               <TextField
@@ -197,7 +229,7 @@ function CreatePostPage() {
                 size="small"
                 label="Description"
                 variant="outlined"
-                onChange={(e) => setContent(e.target.value)}
+                onChange={(e) => handleChange("description", e.target.value)} //setContent(e.target.value)}
                 slotProps={{
                   inputLabel: {
                     shrink: true,
@@ -221,8 +253,8 @@ function CreatePostPage() {
           </Grid>
         </form>
       </BasicModal>
-      
-      <div className="mt-4">
+
+      <div data-aos="fade-up" className="mt-4">
         <DataGrid
           rows={postData}
           columns={columns}
