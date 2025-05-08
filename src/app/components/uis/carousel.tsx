@@ -1,10 +1,10 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
-import { Paper, Button } from "@mui/material";
+import { Paper } from "@mui/material";
 import Image from "next/image";
 
 const Example = () => {
-  var items = [
+  const items = [
     {
       name: "Random Name #1",
       description: "Probably the most random thing you have ever seen!",
@@ -28,19 +28,33 @@ const Example = () => {
 
 const Item = (props) => {
   return (
-    <Paper>
-      {Image && (
+    <div className="relative w-full h-[70vh]">
+      {/* พื้นหลังเบลอ */}
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src={props.item.img}
+          alt="Background"
+          layout="fill"
+          objectFit="cover"
+          className="blur-md"
+        />
+      </div>
+
+      {/* เนื้อหาด้านหน้า */}
+      <Paper className="relative w-full h-full flex flex-col items-center justify-center bg-white/80 shadow-lg rounded-lg p-6">
         <Image
           src={props.item.img}
           alt="Product"
-          width={300}
-          height={300}
-          className="object-cover w-full h-[80vh]"
+          width={800}
+          height={400}
+          objectFit="cover"
+          className="rounded-md"
+          quality={100}
         />
-      )}
-      <h2>{props.item.name}</h2>
-            <p>{props.item.description}</p>
-    </Paper>
+        <h2 className="text-2xl font-bold mt-4">{props.item.name}</h2>
+        <p className="text-gray-600 mt-2">{props.item.description}</p>
+      </Paper>
+    </div>
   );
 };
 
