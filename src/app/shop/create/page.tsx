@@ -61,25 +61,37 @@ const columns: GridColDef[] = [
   {
     field: "Action",
     headerName: "Action",
-    width: 100,
+    width: 150,
     align: "center",
     headerAlign: "center",
     renderCell: (params) => {
       return (
-        <div className="flex justify-center items-center w-full h-full">
-          <IconButton color="primary" href={`/shop/edit/${params.row._id}`}>
-            <Article></Article>
+        <div className="flex justify-center items-center gap-2 w-full h-full">
+          {/* ปุ่ม Edit */}
+          <IconButton
+            color="primary"
+            href={`/shop/edit/${params.row._id}`}
+            sx={{
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.3)", // เพิ่มเงา
+            }}
+          >
+            <Article />
           </IconButton>
+  
+          {/* ปุ่ม Delete */}
           <IconButton
             color="error"
             onClick={() => DeleteProduct(params.row._id)}
+            sx={{
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.3)", // เพิ่มเงา
+            }}
           >
-            <Delete></Delete>
+            <Delete />
           </IconButton>
         </div>
       );
     },
-  },
+  }
 ];
 
 const paginationModel = { page: 0, pageSize: 5 };
@@ -195,7 +207,6 @@ function CreatePostPage() {
 
   return (
     <>
-    <Example></Example>
       <BasicModal text="Add Product">
         <form onSubmit={handleSubmit}>
           <Grid container={true} spacing={2}>
