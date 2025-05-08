@@ -310,7 +310,14 @@ function CreatePostPage() {
           initialState={{ pagination: { paginationModel } }}
           pageSizeOptions={[5, 10]}
           checkboxSelection={false}
-          sx={{ border: 0 }}
+          sx={{ border: 0,
+            "& .MuiDataGrid-row:nth-of-type(odd)" : {
+              backgroundColor : "#f5f5f5",
+            },
+            "& .MuiDataGrid-row:nth-of-type(even)" : {
+              backgroundColor : "#fff",
+            }
+           }}
           className=""
           rowHeight={100}
           loading={postData.length === 0}

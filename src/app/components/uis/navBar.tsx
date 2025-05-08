@@ -39,7 +39,7 @@ const NavBar = () => {
         </Link>
       </div>
       <div className="flex-1 text-center">
-        <h1 className="text-2xl font-bold text-gray-800" data-aos="zoom-in">MY WEBSITE SHOP</h1>
+        <h1 className="text-2xl font-bold text-blue-800" data-aos="zoom-in">MY WEBSITE SHOP</h1>
       </div>
       <Link
         href="/login"
