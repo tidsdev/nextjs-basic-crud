@@ -21,12 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen bg-gray-200">
-        <NavBar></NavBar>
+        <NavBar/>
         <ConditionalBanner />
         <Card className="flex-grow bg-white shadow-md  mx-4 my-4 p-4">
           <div className="flex-grow container mx-auto p-4">{children}</div>
         </Card>
-        <Footer></Footer>
+        <Footer/>
         <SpeedInsights />
       </body>
     </html>

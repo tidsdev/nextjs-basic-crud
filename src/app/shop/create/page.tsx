@@ -1,5 +1,6 @@
 "use client";
 
+import { z } from "zod";
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import BasicModal from "../../components/uis/modal";
@@ -11,6 +12,23 @@ import InputFileUpload from "../../components/uis/upload";
 import { Product } from "../../../interfaces/product";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Example from "../../components/uis/carousel";
+
+interface FormErrors {
+  name?: string;
+  code?: string;
+  img_base64?: string;
+  description?: string;
+  stock_quantity?: number;
+}
+
+const productSchema = z.object({
+  name: z.string().min(1, "*Product Name is Required..."),
+  code: z.string().min(1, "*Product Code is Required..."),
+  img_base64: z.string().min(1, "*Image is Required..."),
+  stock_quantity: z.number().min(1, "*Product Quantity is Required..."),
+  description: z.string().min(1, "*Description is Required..."),
+});
 
 const columns: GridColDef[] = [
   { field: "_id", headerName: "No.", width: 70 },
@@ -67,6 +85,8 @@ const columns: GridColDef[] = [
 const paginationModel = { page: 0, pageSize: 5 };
 
 function CreatePostPage() {
+  const [errors, setErrors] = useState<FormErrors>({});
+
   const [product, setProduct] = useState<Product>({
     _id: null,
     name: "",
@@ -88,17 +108,20 @@ function CreatePostPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !product.name ||
-      !product.img_base64 ||
-      !product.description ||
-      !product.code ||
-      !product.stock_quantity
-    ) {
-      alert("Please fill all the fields");
-      return;
-    }
+    // if (
+    //   !product.name ||
+    //   !product.img_base64 ||
+    //   !product.description ||
+    //   !product.code ||
+    //   !product.stock_quantity
+    // ) {
+    //   alert("Please fill all the fields");
+    //   return;
+    // }
     try {
+      // Validate product data
+      productSchema.parse(product);
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`,
         {
@@ -123,7 +146,16 @@ function CreatePostPage() {
         throw new Error("Failed to create post");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error creating post: ", error);
+      if (error instanceof z.ZodError) {
+        const fieldErrors = {};
+        error.errors.forEach((err) => {
+          fieldErrors[err.path[0]] = err.message;
+        });
+        setErrors(fieldErrors);
+      } else {
+        console.log(error);
+      }
     }
   };
 
@@ -163,6 +195,7 @@ function CreatePostPage() {
 
   return (
     <>
+    <Example></Example>
       <BasicModal text="Add Product">
         <form onSubmit={handleSubmit}>
           <Grid container={true} spacing={2}>
@@ -171,7 +204,6 @@ function CreatePostPage() {
                 onChange={(value) => handleChange("img_base64", value)}
               ></InputFileUpload>
             </Grid>
-
             <Grid size={6}>
               <TextField
                 id="outlined-basic"
@@ -185,6 +217,8 @@ function CreatePostPage() {
                   },
                 }}
                 fullWidth={true}
+                error={!!errors.name}
+                helperText={errors.name}
               />
             </Grid>
             <Grid size={6}>
@@ -200,6 +234,8 @@ function CreatePostPage() {
                   },
                 }}
                 fullWidth={true}
+                error={!!errors.code}
+                helperText={errors.code}
               />
             </Grid>
             <Grid size={6}>
@@ -211,23 +247,24 @@ function CreatePostPage() {
                 variant="outlined"
                 onChange={(e) =>
                   handleChange("stock_quantity", Number(e.target.value))
-                } //setQuantity(Number(e.target.value))}
+                }
                 slotProps={{
                   inputLabel: {
                     shrink: true,
                   },
                 }}
+                error={!!errors.stock_quantity}
+                helperText={errors.stock_quantity}
                 fullWidth={true}
               ></TextField>
             </Grid>
-
             <Grid size={12}>
               <TextField
                 id="outlined-basic"
                 size="small"
                 label="Description"
                 variant="outlined"
-                onChange={(e) => handleChange("description", e.target.value)} //setContent(e.target.value)}
+                onChange={(e) => handleChange("description", e.target.value)}
                 slotProps={{
                   inputLabel: {
                     shrink: true,
@@ -236,6 +273,8 @@ function CreatePostPage() {
                 rows={4}
                 multiline={true}
                 fullWidth={true}
+                error={!!errors.description}
+                helperText={errors.description}
               />
             </Grid>
             <Grid size={2}>

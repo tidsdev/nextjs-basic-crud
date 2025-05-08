@@ -7,7 +7,7 @@ export async function POST(req) {
   try {
     const { productId } = await req.json();
     await connectMongoDB();
-    // ตรวจสอบว่า productId เป็น ObjectId ที่ถูกต้อง
+    
     if (!mongoose.Types.ObjectId.isValid(productId)) {
       throw new Error("Invalid productId");
     }

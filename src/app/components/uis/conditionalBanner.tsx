@@ -1,5 +1,9 @@
 "use client";
+
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
+
+const Example = dynamic(() => import("./carousel"), { ssr: false });
 
 const ConditionalBanner = () => {
   const pathName = usePathname();
@@ -10,14 +14,12 @@ const ConditionalBanner = () => {
   }
 
   return (
-    <div className="bg-gray-100 h-[70vh] flex flex-col items-center justify-center">
-      <div data-aos="fade-right">
-        <h1 className="text-6xl font-bold mb-4">Lorem ipsum dolor sit amet.</h1>
-        <p className="text-1xl w-100">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, hic.
-        </p>
-      </div>
-    </div>
+    // <div className="bg-gray-100 h-[70vh] flex flex-col items-center justify-center">
+    //   <div data-aos="fade-right">
+       
+    //   </div>
+    // </div>
+    <Example />
   );
 };
 
