@@ -1,8 +1,12 @@
+"use client";
+import dynamic from "next/dynamic";
 import React from "react";
-import Carousel from "react-material-ui-carousel";
+// import Carousel from "react-material-ui-carousel";
 import { Paper } from "@mui/material";
 import Image from "next/image";
-
+const Carousel = dynamic(() => import("react-material-ui-carousel"), {
+  ssr: false,
+});
 const Example = () => {
   const items = [
     {
@@ -34,14 +38,18 @@ const Example = () => {
 
   return (
     <Carousel
+      key={items.map((item) => item.img).join(",")} //ใช้ key เพื่อบังคับการรีเรนเดอร์
       navButtonsAlwaysVisible={true} // แสดงปุ่มนำทางเสมอ
       indicators={true} // ซ่อนจุดบอกตำแหน่ง
-      autoPlay={true} // ปิด autoplay
-      animation="slide" // ใช้เอฟเฟกต์ slide
+      autoPlay={false} // ปิด autoplay
+      animation="fade" // ใช้เอฟเฟกต์ slide
       className="relative"
       sx={{
+        width: "100%",
+        height: "78vh",
+        margin: "0 auto",
         "& .MuiPaper-root": {
-          overflow: "visible", // ทำให้ภาพข้างๆแสดงบางส่วน
+          backgroundColor: "transparent", // ทำให้พื้นหลังของ Carousel โปร่งใส
         },
       }}
     >
@@ -54,7 +62,7 @@ const Example = () => {
 
 const Item = (props) => {
   return (
-    <div className="relative w-[90%] mx-auto h-[70vh]">
+    <div className="relative w-[90%] mx-auto h-[70vh] mt-4">
       {/* พื้นหลังเบลอ */}
       <div className="absolute inset-0 -z-10">
         <Image
@@ -62,7 +70,7 @@ const Item = (props) => {
           alt="Background"
           layout="fill"
           objectFit="cover"
-          className="blur-md"
+          className="blur-md mask-y-to-cyan-100 rounded-md w-auto h-auto"
         />
       </div>
 
@@ -74,10 +82,13 @@ const Item = (props) => {
           width={800}
           height={400}
           objectFit="cover"
-          className="rounded-md"
+          className="rounded-md hover:scale-101 duration-300"
           quality={100}
+          loading="lazy"
         />
-        <h2 className="text-2xl font-bold mt-4 mb-4">{props.item.name}</h2>
+        <div className="text-center absolute bottom-0 left-0 right-0 p-4 bg-white/30 rounded-b-md shadow-lg backdrop-blur-sm">
+          <h2 className="text-2xl font-bold mt-4 mb-4 bg">{props.item.name}</h2>
+        </div>
       </Paper>
     </div>
   );

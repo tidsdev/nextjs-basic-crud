@@ -1,9 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-
-const Example = dynamic(() => import("./carousel"), { ssr: false });
+import Example from "./carousel"; // Assuming this is the path to your Example component
 
 const ConditionalBanner = () => {
   const pathName = usePathname();
@@ -14,11 +12,6 @@ const ConditionalBanner = () => {
   }
 
   return (
-    // <div className="bg-gray-100 h-[70vh] flex flex-col items-center justify-center">
-    //   <div data-aos="fade-right">
-       
-    //   </div>
-    // </div>
     <Example />
   );
 };

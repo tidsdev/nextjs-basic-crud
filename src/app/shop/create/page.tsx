@@ -313,9 +313,15 @@ function CreatePostPage() {
           sx={{ border: 0,
             "& .MuiDataGrid-row:nth-of-type(odd)" : {
               backgroundColor : "#f5f5f5",
+              ":hover" : {
+                backgroundColor : "#e0e0e0",
+              }
             },
             "& .MuiDataGrid-row:nth-of-type(even)" : {
               backgroundColor : "#fff",
+              ":hover" : {
+                backgroundColor : "#e0e0e0",
+              }
             }
            }}
           className=""
