@@ -1,26 +1,41 @@
 import { NextResponse } from "next/server";
 import { connectMongoDB } from "../../../../lib/mongodb";
 import member from "../../../../models/member";
-import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import CryptoJS from "crypto-js";
+dotenv.config();
 
+const SECRET_KEY = process.env.SECRET_KEY;
 export async function POST(req) {
-  const { username, password } = await req.json();
-  // สร้าง Token
-  const token = jwt.sign(
-    { id: user._id, username: user.username }, // payload
-    process.env.JWT_SECRET || "your-secret-key", // secret key
-    { expiresIn: "1h" } // ตัวเลือก เช่น อายุของ token
-  );
-  await connectMongoDB();
-  await member.create({
-    username,
-    password,
-    email,
-    tokenId: token,
-  });
+  try {
+    const { username, password, email } = await req.json();
 
-  return NextResponse.json(
-    { message: "Post created successfully" },
-    { status: 201 }
-  );
+    await connectMongoDB();
+
+    const encryptedPassword = CryptoJS.AES.encrypt(
+      password,
+      SECRET_KEY
+    ).toString();
+
+    console.log("SECRET_KEY : " + SECRET_KEY);
+    console.log("Encrypted Password: ", encryptedPassword);
+
+    await member.create({
+      username,
+      password: encryptedPassword,
+      email,
+    });
+
+    return NextResponse.json(
+      { message: "Post created successfully" },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({
+      meesage: "Error creating order : " + error.message + " ",
+      error: error,
+      status: 500,
+    });
+  }
 }

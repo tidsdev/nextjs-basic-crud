@@ -5,7 +5,6 @@ const memberSchema = new Schema(
     username : String,
     password : String,
     email : String,
-    tokenId : String,
   },
   {
     timestamps: true,
