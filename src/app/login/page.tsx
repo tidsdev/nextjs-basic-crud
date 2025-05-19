@@ -4,6 +4,15 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppBar, Box, Button, Grid, Tab, Tabs, TextField } from "@mui/material";
 import Link from "@mui/material/Link";
+import { z } from "zod";
+import path from "path";
+
+interface formErrors {
+  email?: string;
+  username?: string;
+  password?: string;
+  confirmPassword?: string;
+}
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -33,15 +42,37 @@ function a11yProps(index: number) {
 }
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const formSchema = z.object({
+    email: z
+      .string()
+      .email("Invalid email format"),
+    username: z.string().min(1, "*Username is Required..."),
+    password: z.string().min(1, "*Password is Required..."),
+    confirmPassword: z.string().min(1, "*Confirm Password is Required..."),
+  });
 
+  const [signUp, setSignUp] = useState<signUpPoprs>({
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [login, setLogin] = useState({
+    username : "",
+    password : "", 
+  })
+
+  interface signUpPoprs {
+    email: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
+  }
+
+  const [errors, setErrors] = useState<formErrors>({});
   const router = useRouter();
-
   const [value, setValue] = useState(0);
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -50,7 +81,10 @@ const LoginPage = () => {
     e.preventDefault();
 
     // Mock login logic
-    if (email === "admin@example.com" && password === "password") {
+    if (
+      signUp.email === "admin@example.com" &&
+      signUp.password === "password"
+    ) {
       alert("Login successful!");
       router.push("/shop"); // Redirect to Shop page
     } else {
@@ -58,37 +92,44 @@ const LoginPage = () => {
     }
   };
 
-
-
-  const handleSignUp = async(e : React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      formSchema.parse(signUp);
 
-    if(password !== confirmPassword) {
-      alert("Password and confirm password do not match");
-      return;
-    }
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/members`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type" : "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          username,
-          password,
-        })
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/members`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: signUp.email,
+            username: signUp.username,
+            password: signUp.password,
+          }),
+        }
+      );
+      if (res.ok) {
+        alert("Sign up successful!");
+      } else {
+        alert("Sign up failed");
+        throw new Error("Sign up failed");
       }
-    )
-    if(res.ok){
-      alert("Sign up successful!");
-    }else{
-      alert("Sign up failed");
-      throw new Error("Sign up failed");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors = {};
+        error.errors.forEach((err) => {
+          fieldErrors[err.path[0]] = err.message;
+        });
+        setErrors(fieldErrors);
+      } else {
+        console.log("Error signing up: ", error);
+      }
+      
     }
-  }
+  };
 
   return (
     <>
@@ -172,10 +213,12 @@ const LoginPage = () => {
                   <Grid size={12}>
                     <TextField
                       label="Email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={signUp.email}
+                      onChange={(e) =>
+                        setSignUp({ ...signUp, email: e.target.value })
+                      }
                       size="small"
-                      type="email"
+                      // type="email"
                       placeholder="Excample@gmail.com"
                       fullWidth={true}
                       slotProps={{
@@ -183,12 +226,16 @@ const LoginPage = () => {
                           shrink: true,
                         },
                       }}
+                      error={!!errors.email}
+                      helperText={errors.email}
                     ></TextField>
                   </Grid>
                   <Grid size={12}>
                     <TextField
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
+                      value={signUp.username}
+                      onChange={(e) =>
+                        setSignUp({ ...signUp, username: e.target.value })
+                      }
                       label="User Name"
                       size="small"
                       placeholder="Enter username"
@@ -198,12 +245,16 @@ const LoginPage = () => {
                           shrink: true,
                         },
                       }}
+                      error={!!errors.username}
+                      helperText={errors.username}
                     ></TextField>
                   </Grid>
                   <Grid size={12}>
                     <TextField
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      value={signUp.password}
+                      onChange={(e) =>
+                        setSignUp({ ...signUp, password: e.target.value })
+                      }
                       label="Password"
                       size="small"
                       type="password"
@@ -214,12 +265,19 @@ const LoginPage = () => {
                           shrink: true,
                         },
                       }}
+                      error={!!errors.password}
+                      helperText={errors.password}
                     ></TextField>
                   </Grid>
                   <Grid size={12}>
                     <TextField
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      value={signUp.confirmPassword}
+                      onChange={(e) =>
+                        setSignUp({
+                          ...signUp,
+                          confirmPassword: e.target.value,
+                        })
+                      }
                       label="Comfirm Password"
                       size="small"
                       type="password"
@@ -230,12 +288,9 @@ const LoginPage = () => {
                           shrink: true,
                         },
                       }}
+                      error={!!errors.confirmPassword}
+                      helperText={errors.confirmPassword}
                     ></TextField>
-                  </Grid>
-                  <Grid size={12}>
-                    <Link href="#" underline="hover" className="text-blue-500">
-                      Forget Password
-                    </Link>
                   </Grid>
                   <Grid size={12}>
                     <Button
